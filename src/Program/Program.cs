@@ -37,6 +37,8 @@ namespace Full_GRASP_And_SOLID
             recipe.Cook();
             Thread.Sleep(500); // 0.5 segundos
             Console.WriteLine($"Cooked: {recipe.Cooked}");
+
+            System.Console.WriteLine("-----Se usa el principio de ISP (Interface Segregation Principle).-----");
         }
 
         private static void PopulateCatalogs()
