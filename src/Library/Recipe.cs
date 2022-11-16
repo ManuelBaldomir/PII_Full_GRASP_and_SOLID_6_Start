@@ -6,15 +6,22 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Full_GRASP_And_SOLID
 {
-    public class Recipe : IRecipeContent // Modificado por DIP
+    public class Recipe : IRecipeContent , TimerClient // Modificado por DIP
     {
         // Cambiado por OCP
         private IList<BaseStep> steps = new List<BaseStep>();
 
         public Product FinalProduct { get; set; }
+
+        public bool Cooked {get; private set;}= false;
+
+        private CountdownTimer timer = new CountdownTimer();
+
+
 
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
@@ -61,6 +68,35 @@ namespace Full_GRASP_And_SOLID
             }
 
             return result;
+        }
+
+        public int GetCookTime()
+        {
+            int result = 0;
+            foreach (BaseStep step in steps)
+            {
+                result += step.Time;
+            }
+            return result;
+        }
+
+        public void TimeOut()
+        {
+            this.Cook();
+        }
+
+        public void Cook()
+        {
+            if (this.Cooked)
+            {
+                System.Console.WriteLine("Ya está cocinado");
+            }
+            else
+            {
+                this.Cooked = true;
+                this.timer.Register(GetCookTime(), this);
+            }
+            
         }
     }
 }
